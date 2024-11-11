@@ -1,35 +1,58 @@
-// Arreglo para almacenar las tareas
+
 let tasks = [];
 
-// Función para agregar una tarea al arreglo y mostrarla en la lista
+
 function addTask() {
     const taskInput = document.getElementById('taskInput');
     const taskText = taskInput.value.trim();
+    const todoId = tasks.length + 1;
 
     if (taskText !== "") {
-        tasks.push(taskText);  // Agregar tarea al arreglo
-        taskInput.value = "";  // Limpiar el campo de entrada
-        renderTasks();         // Mostrar tareas actualizadas
+        tasks.push({ id: todoId, nombre: taskText, estado: 'pendiente' });
+        taskInput.value = "";
+        renderTasks();
     }
 }
 
-// Función para eliminar una tarea por su índice en el arreglo
-function removeTask(index) {
-    tasks.splice(index, 1);  // Eliminar tarea del arreglo
-    renderTasks();           // Mostrar tareas actualizadas
+
+function modificarTask(id) {
+    for (let i = 0; i < tasks.length; i++) {
+        if (tasks[i].id === id) {
+            tasks[i].estado = tasks[i].estado === 'pendiente' ? 'completado' : 'pendiente';
+            renderTasks();
+            return;
+        }
+    }
 }
 
-// Función para mostrar las tareas en la lista
+
+function removeTask(index) {
+    tasks.splice(index, 1);
+    renderTasks();
+}
+
+
 function renderTasks() {
     const todoList = document.getElementById('todoList');
-    todoList.innerHTML = "";  // Limpiar la lista
+    todoList.innerHTML = "";
 
-    for (let i = 0; i < tasks.length; i++) {
+    for (let i = 0; i < Math.min(tasks.length, 4); i++) {
+        const task = tasks[i];
+
         const taskItem = document.createElement('div');
         taskItem.className = 'todo-item';
 
         const taskText = document.createElement('span');
-        taskText.innerText = tasks[i];
+        taskText.innerText = task.nombre
+
+        const estadoImg = document.createElement('img');
+        estadoImg.src = task.estado === 'pendiente' ? '/img/cruz.png' : '/img/garrapata.png';
+        estadoImg.alt = task.estado;
+        estadoImg.className = 'estado-img';
+
+        const modButton = document.createElement('button');
+        modButton.innerText = "Cambiar estado";
+        modButton.onclick = () => modificarTask(task.id);
 
         const deleteButton = document.createElement('button');
         deleteButton.innerText = 'Eliminar';
@@ -37,6 +60,8 @@ function renderTasks() {
 
         taskItem.appendChild(taskText);
         taskItem.appendChild(deleteButton);
+        taskItem.appendChild(modButton);
+        taskItem.appendChild(estadoImg);
         todoList.appendChild(taskItem);
     }
 }
