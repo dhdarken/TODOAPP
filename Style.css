@@ -63,7 +63,7 @@ body {
 }
 .todo-item button {
   background-color: rgba(3, 56, 117, 0.973);
-  color: white;
+  color: rgba(255, 252, 252, 0.925);
   border-radius: 20px;
   width: 90px;
   border: none;
